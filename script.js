@@ -2,6 +2,7 @@ let canvas = document.getElementById("snake");
 let contexto = canvas.getContext("2d");
 let caixa = 32;
 let snake = []; //vetor: atribui vários valores dentro, diferente das variáveis, que só armazenam um valor ou informação por vez
+let contador = 0;
 
 snake[0] = {
     x: 8 * caixa, 
@@ -129,6 +130,10 @@ function iniciarJogo(){
     criarFundo();
     criarCobrinha(); 
     desenharComida();
+
+    contexto.fillStyle = "white";
+    contexto.font = "20px Arial";
+    contexto.fillText("Pontos: " + contador, 10, 30)
     
     let cobraX = snake[0].x;
     let cobraY = snake[0].y;
@@ -141,6 +146,7 @@ function iniciarJogo(){
     //verificar se comeu a comida
 
     if(cobraX == comida.x && cobraY == comida.y){
+        contador++;
         comida.x = Math.floor(Math.random() * 16) *caixa;
         comida.y = Math.floor(Math.random() * 16) *caixa;
      }else{
@@ -158,6 +164,8 @@ let jogo = setInterval(iniciarJogo, 100);
 
 function reiniciarJogo() {
     // Resetar o estado do jogo
+    contador = 0;
+
     snake = [];
     snake[0] = {
         x: 8 * caixa,
