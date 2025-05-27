@@ -8,13 +8,10 @@ snake[0] = {
     y: 8 * caixa
 }
 
+//Textura da cobrinha
 let textura = new Image();
-textura.src = 'yqw5rywc.png'; // exemplo de imagem, troque pela que quiser
+textura.src = '/imagens/círculo.png'; 
 
-  // Espera a imagem carregar antes de desenhar
-textura.onload = function() {
-    criarCobrinha();  
-};
 
 function criarCobrinha() {
     contexto.clearRect(0, 0, snake, snake);
@@ -22,8 +19,49 @@ function criarCobrinha() {
     for (let i = 0; i < snake.length; i++) {
         contexto.drawImage(textura, snake[i].x, snake[i].y, caixa, caixa);
     }
-}
+    
+    let cabeca = snake[0];//Posição da cabeça
+    let eyeSize = 6;
+    let irisSize = 5; // tamanho da íris 
+    let leftEyeX, rightEyeX, olhoY;// Posições relativas dos olhos dependendo da direção
+                                        
 
+    if (direcao === 'cima' || direcao === 'baixo') {
+        leftEyeX = cabeca.x + 8 - 4;   
+        rightEyeX = cabeca.x + 8 + 16 + 4;
+        olhoY = cabeca.y + 12;
+
+    } else if (direcao === 'esquerda' || direcao === 'direita') {
+        leftEyeX = cabeca.x + 8;
+        rightEyeX = cabeca.x + 8;
+
+    }
+    if (direcao === 'esquerda') {
+        olhoY = cabeca.y + 12 - 4;
+    }
+    else{
+        olhoY = cabeca.y + 12 + 4;
+    } 
+    
+    // Função para desenhar o olho com íris
+    function desenharOlhoComIris(x, y) {
+    // Desenha o círculo do olho
+    contexto.beginPath();
+    contexto.arc(x, y, eyeSize, 0, Math.PI *2);
+    contexto.fillStyle = 'white'; // cor da esclera
+    contexto.fill();
+
+    // Desenha a íris no centro do olho
+    contexto.beginPath();
+    contexto.arc(x, y, irisSize, 0, Math.PI *2);
+    contexto.fillStyle = 'black'; // cor da íris
+    contexto.fill();
+    }
+
+    // Desenhar os olhos com íris
+    desenharOlhoComIris(leftEyeX, olhoY);
+    desenharOlhoComIris(rightEyeX, olhoY);
+}
 
 
 let direcao = 'direita';
@@ -34,24 +72,24 @@ let comida = {  //Math.floor: arredondar o nº aleatório || Math.random: nº en
     y: Math.floor(Math.random() * 15 + 1) * caixa
 }
 
+//Textura do fundo
+let textFundo = new Image();
+textFundo.src = '/imagens/grama-verde.avif';
+
 function criarFundo( ){
-    contexto.fillStyle = "lightgreen";
-    contexto.fillRect(0, 0, 16 * caixa, 16 * caixa);
+    contexto.drawImage(textFundo, 0, 0, 16 * caixa, 16 * caixa);
 }
 
 
-//function criarCobrinha() { //Aumenta um bloco na cobrinha
-    //for (i=0; i < snake.length; i++){
-        //contexto.fillStyle = "green";
-        //contexto.fillRect(snake[i].x, snake[i].y, caixa, caixa);
-        //contexto.fillRect() = desenha um retângulo preenchido no canvas
-        //contexto.fillRect(coordenada x, coordenada y, largura da comida(caixa), altura da comida(caixa))
-  //  }
-//}
+
+//contexto.fillRect() = desenha um retângulo preenchido no canvas
+//contexto.fillRect(coordenada x, coordenada y, largura da comida(caixa), altura da comida(caixa))
+  
+let maca = new Image();
+maca.src = "/imagens/Apple.png"
 
 function desenharComida() {
-    contexto.fillStyle = "red";
-    contexto.fillRect(comida.x, comida.y, caixa, caixa);
+    contexto.drawImage(maca, comida.x, comida.y, caixa, caixa);
 }
 
 
@@ -102,13 +140,6 @@ function iniciarJogo(){
 
     //verificar se comeu a comida
 
-    //if(cobraX != comida.x || cobraY != snake.y){
-       //snake.pop();
-    //}else{
-        //comida.x = Math.floor(Math.random() * 15 + 1) *caixa;
-        //comida.y = Math.floor(Math.random() * 15 + 1) *caixa;  
-    //}
-
     if(cobraX == comida.x && cobraY == comida.y){
         comida.x = Math.floor(Math.random() * 16) *caixa;
         comida.y = Math.floor(Math.random() * 16) *caixa;
@@ -124,3 +155,24 @@ function iniciarJogo(){
     snake.unshift(novaCabeca);//add nova parte do corpo
 }
 let jogo = setInterval(iniciarJogo, 100);
+
+function reiniciarJogo() {
+    // Resetar o estado do jogo
+    snake = [];
+    snake[0] = {
+        x: 8 * caixa,
+        y: 8 * caixa
+    };
+    direcao = "direita";
+    comida = {
+        x: Math.floor(Math.random() * 15 + 1) * caixa,
+        y: Math.floor(Math.random() * 15 + 1) * caixa
+    };
+    
+    // Oculta a tela de fim de jogo
+    document.getElementById("game-over").style.display = "none";
+    
+    // Reinicia o loop do jogo
+    jogo = setInterval(iniciarJogo, 100);
+    }
+    document.getElementById("game-over").style.display = "block";

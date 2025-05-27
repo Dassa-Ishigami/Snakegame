@@ -1,17 +1,17 @@
-body {
-    background-image: url();
+#cenário {
     display: flex;
     justify-content: center;
-    flex-direction: column;
+    flex-direction:column;
     align-items: center;
     background-size: cover;
+    background-color: rgb(14, 39, 21);
+
 }
 
 h1 {
     font-size: 95px;
-    color: #050605;
+    color: #a2f097;
 }
-
 
 
 
